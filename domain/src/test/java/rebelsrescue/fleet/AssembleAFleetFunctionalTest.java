@@ -23,7 +23,7 @@ class AssembleAFleetFunctionalTest {
                 new StarShip("l", 800),
                 new StarShip("xl", 2000));
         var numberOfPassengers = 1050;
-        AssembleAFleet assembleAFleet = null;
+        AssembleAFleet assembleAFleet = new FleetAssembler();
 
         //When
         Fleet fleet = assembleAFleet.forPassengers(numberOfPassengers);
