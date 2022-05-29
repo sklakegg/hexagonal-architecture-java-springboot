@@ -3,6 +3,8 @@ package rebelsrescue.fleet;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import rebelsrescue.fleet.api.AssembleAFleet;
+import rebelsrescue.fleet.spi.StarShipInventory;
+import rebelsrescue.fleet.spi.stubs.StarShipInventoryStub;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -15,7 +17,7 @@ class AssembleAFleetFunctionalTest {
     @Test
     void should_assemble_a_fleet_for_1050_passengers() {
         //Given
-        var starships = asList(
+        var starShips = asList(
                 new StarShip("no-passenger-ship", 0),
                 new StarShip("xs", 10),
                 new StarShip("s", 50),
@@ -23,7 +25,9 @@ class AssembleAFleetFunctionalTest {
                 new StarShip("l", 800),
                 new StarShip("xl", 2000));
         var numberOfPassengers = 1050;
-        AssembleAFleet assembleAFleet = new FleetAssembler();
+
+        StarShipInventory starShipsInventory = new StarShipInventoryStub(starShips);
+        AssembleAFleet assembleAFleet = new FleetAssembler(starShipsInventory);
 
         //When
         Fleet fleet = assembleAFleet.forPassengers(numberOfPassengers);
