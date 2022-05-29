@@ -1,0 +1,52 @@
+package rebelsrescue.fleet;
+
+import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Test;
+import rebelsrescue.fleet.api.AssembleAFleet;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class AssembleAFleetFunctionalTest {
+
+    @Test
+    void should_assemble_a_fleet_for_1050_passengers() {
+        //Given
+        var starships = asList(
+                new StarShip("no-passenger-ship", 0),
+                new StarShip("xs", 10),
+                new StarShip("s", 50),
+                new StarShip("m", 200),
+                new StarShip("l", 800),
+                new StarShip("xl", 2000));
+        var numberOfPassengers = 1050;
+        AssembleAFleet assembleAFleet = null;
+
+        //When
+        Fleet fleet = assembleAFleet.forPassengers(numberOfPassengers);
+
+        //Then
+        System.out.println(fleet);
+        assertThat(fleet.starships())
+                .has(enoughCapacityForThePassengers(numberOfPassengers))
+                .allMatch(hasPassengersCapacity());
+
+    }
+
+    private Predicate<? super StarShip> hasPassengersCapacity() {
+        return starShip -> starShip.capacity() > 0;
+    }
+
+    private Condition<? super List<? extends StarShip>> enoughCapacityForThePassengers(int numberOfPassengers) {
+        return new Condition<>(
+                starShips ->
+                        starShips.stream()
+                                .map(StarShip::capacity)
+                                .reduce(0, Integer::sum) >= numberOfPassengers,
+                "capacity check");
+    }
+
+}
