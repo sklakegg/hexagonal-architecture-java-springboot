@@ -30,9 +30,15 @@ public class SwapiClient implements StarShipInventory {
 
     @Override
     public List<StarShip> starShips() {
-        var swapiResponse = getStarShipsFromSwapi();
+        List<StarShip> starShips = new ArrayList<>();
 
-        return convertSwapiResponseToStarShips(swapiResponse);
+        var nextPageUrl = swapiBaseUri + "/api/starships";
+        while (nextPageUrl != null) {
+            var swapiResponse = getStarShipsFromSwapi(nextPageUrl);
+            starShips.addAll(convertSwapiResponseToStarShips(swapiResponse));
+            nextPageUrl = swapiResponse.next();
+        }
+        return starShips;
     }
 
     private List<StarShip> convertSwapiResponseToStarShips(SwapiResponse swapiResponse) {
@@ -55,7 +61,7 @@ public class SwapiClient implements StarShipInventory {
                 && !swapiStarShip.passengers().equalsIgnoreCase("unknown");
     }
 
-    private SwapiResponse getStarShipsFromSwapi() {
-        return restTemplate.getForObject(swapiBaseUri + "/api/starships", SwapiResponse.class);
+    private SwapiResponse getStarShipsFromSwapi(String url) {
+        return restTemplate.getForObject(url, SwapiResponse.class);
     }
 }
