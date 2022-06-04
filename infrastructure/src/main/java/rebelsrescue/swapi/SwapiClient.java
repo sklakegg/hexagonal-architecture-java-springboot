@@ -9,6 +9,10 @@ import rebelsrescue.fleet.spi.StarShipInventory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.Integer.parseInt;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class SwapiClient implements StarShipInventory {
@@ -23,6 +27,14 @@ public class SwapiClient implements StarShipInventory {
 
     @Override
     public List<StarShip> starShips() {
-        return Collections.emptyList();
+        var swapiResponse = getStarShipsFromSwapi();
+        List<StarShip> starShips = swapiResponse.results().stream()
+                .map(swapiStarShip -> new StarShip(swapiStarShip.name(), parseInt(swapiStarShip.passengers())))
+                .collect(toList());
+        return starShips;
+    }
+
+    private SwapiResponse getStarShipsFromSwapi() {
+        return restTemplate.getForObject(swapiBaseUri + "/api/starships", SwapiResponse.class);
     }
 }
