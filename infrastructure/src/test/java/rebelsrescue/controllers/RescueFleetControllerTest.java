@@ -15,6 +15,8 @@ import rebelsrescue.fleet.Fleet;
 import rebelsrescue.fleet.StarShip;
 import rebelsrescue.fleet.spi.Fleets;
 
+import java.math.BigDecimal;
+
 import static java.util.Collections.singletonList;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,7 +49,7 @@ final class RescueFleetControllerTest {
     @Test
     void should_return_a_fleet_given_an_id() throws Exception {
         Fleet fleet = new Fleet(singletonList(
-                new StarShip("Millennium Falcon", 6)
+                new StarShip("Millennium Falcon", 6, new BigDecimal("100000"))
         ));
         fleets.save(fleet);
 

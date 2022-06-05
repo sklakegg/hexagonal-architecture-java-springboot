@@ -1,4 +1,6 @@
 package rebelsrescue.fleet;
 
-public record StarShip(String name, int capacity) {
+import java.math.BigDecimal;
+
+public record StarShip(String name, int capacity, BigDecimal cargoCapacity) {
 }
