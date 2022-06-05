@@ -39,7 +39,7 @@ public class FleetAssembler implements AssembleAFleet {
         List<StarShip> rescueStarShips = new ArrayList<>();
         while (numberOfPassengers > 0) {
             var starShip = starShips.remove(0);
-            numberOfPassengers -= starShip.capacity();
+            numberOfPassengers -= starShip.passengersCapacity();
             rescueStarShips.add(starShip);
         }
         return rescueStarShips;
@@ -52,8 +52,8 @@ public class FleetAssembler implements AssembleAFleet {
     private List<StarShip> retrieveStarShips() {
         List<StarShip> starships =
                 starshipsInventory.starShips().stream()
-                        .filter(starShip -> starShip.capacity() > 0)
-                        .sorted(comparingInt(StarShip::capacity)).toList();
+                        .filter(starShip -> starShip.passengersCapacity() > 0)
+                        .sorted(comparingInt(StarShip::passengersCapacity)).toList();
         return new ArrayList<>(starships);
     }
 }

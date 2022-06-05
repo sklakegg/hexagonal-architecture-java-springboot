@@ -60,7 +60,7 @@ final class RescueFleetControllerTest {
                 .andExpect(jsonPath("$.id").value(fleet.id().toString()))
                 .andExpect(jsonPath("$.starships").value(hasSize(fleet.starships().size())))
                 .andExpect(jsonPath("$.starships[0].name").value(fleet.starships().get(0).name()))
-                .andExpect(jsonPath("$.starships[0].capacity").value(fleet.starships().get(0).capacity()));
+                .andExpect(jsonPath("$.starships[0].capacity").value(fleet.starships().get(0).passengersCapacity()));
     }
 
     @TestConfiguration

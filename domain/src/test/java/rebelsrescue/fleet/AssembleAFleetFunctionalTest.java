@@ -49,7 +49,7 @@ class AssembleAFleetFunctionalTest {
     }
 
     private Predicate<? super StarShip> hasPassengersCapacity() {
-        return starShip -> starShip.capacity() > 0;
+        return starShip -> starShip.passengersCapacity() > 0;
     }
 
     private Predicate<? super StarShip> hasEnoughCargoCapacity() {
@@ -60,9 +60,9 @@ class AssembleAFleetFunctionalTest {
         return new Condition<>(
                 starShips ->
                         starShips.stream()
-                                .map(StarShip::capacity)
+                                .map(StarShip::passengersCapacity)
                                 .reduce(0, Integer::sum) >= numberOfPassengers,
-                "capacity check");
+                "passengersCapacity check");
     }
 
 }
