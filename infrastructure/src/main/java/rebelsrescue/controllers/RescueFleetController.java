@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rebelsrescue.fleet.Fleet;
 import rebelsrescue.fleet.api.AssembleAFleet;
 import rebelsrescue.fleet.spi.Fleets;
 
@@ -31,14 +30,14 @@ public class RescueFleetController {
     }
 
     @PostMapping
-    public ResponseEntity<Fleet> assembleAFleet(@RequestBody RescueFleetRequest rescueFleetRequest) throws URISyntaxException {
+    public ResponseEntity<FleetResource> assembleAFleet(@RequestBody RescueFleetRequest rescueFleetRequest) throws URISyntaxException {
         var fleet = assembleAFleet.forPassengers(rescueFleetRequest.numberOfPassengers);
         return created(fromMethodCall(on(this.getClass()).getFleetById(fleet.id())).build().toUri())
-                .body(fleet);
+                .body(new FleetResource(fleet));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Fleet> getFleetById(@PathVariable UUID id) {
-        return ok(fleets.getById(id));
+    public ResponseEntity<FleetResource> getFleetById(@PathVariable UUID id) {
+        return ok(new FleetResource(fleets.getById(id)));
     }
 }
