@@ -10,6 +10,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import rebelsrescue.fleet.StarShip;
 import rebelsrescue.fleet.spi.StarShipInventory;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,9 +41,9 @@ public class SwapiClientTest {
         List<StarShip> starships = swapiClient.starShips();
 
         assertThat(starships).containsExactly(
-                new StarShip("CR90 corvette", 600),
-                new StarShip("Slave 1", 6),
-                new StarShip("Death Star", 843342));
+                new StarShip("CR90 corvette", 600, new BigDecimal("3000000")),
+                new StarShip("Slave 1", 6, new BigDecimal("70000")),
+                new StarShip("Death Star", 843342, new BigDecimal("1000000000000")));
 
     }
 

@@ -51,8 +51,8 @@ class StarwarsRebelsRescueApplicationTests {
         assertThat(response.getStatusCode()).isEqualTo(CREATED);
         assertThat(json.from(response.getBody())).hasJsonPath("@.id");
         assertThat(json.from(response.getBody())).extractingJsonPathArrayValue("@.starships").hasSize(1);
-        assertThat(json.from(response.getBody())).extractingJsonPathStringValue("@.starships[0].name").isEqualTo("Slave 1");
-        assertThat(json.from(response.getBody())).extractingJsonPathNumberValue("@.starships[0].capacity").isEqualTo(6);
+        assertThat(json.from(response.getBody())).extractingJsonPathStringValue("@.starships[0].name").isEqualTo("CR90 corvette");
+        assertThat(json.from(response.getBody())).extractingJsonPathNumberValue("@.starships[0].capacity").isEqualTo(600);
     }
 
     private void configureSwapiMock() {

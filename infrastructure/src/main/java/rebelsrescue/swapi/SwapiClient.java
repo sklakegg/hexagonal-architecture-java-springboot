@@ -9,17 +9,20 @@ import rebelsrescue.fleet.spi.StarShipInventory;
 import rebelsrescue.swapi.model.SwapiResponse;
 import rebelsrescue.swapi.model.SwapiStarShip;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.lang.Integer.parseInt;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Component
 public class SwapiClient implements StarShipInventory {
     private final RestTemplate restTemplate;
+    private final List<String> invalidCapacitiesValues = asList("n/a", "unknown");
 
     @Value("${swapi.base-uri}")
     private String swapiBaseUri;
@@ -52,13 +55,14 @@ public class SwapiClient implements StarShipInventory {
         return swapiStarShip ->
                 new StarShip(
                         swapiStarShip.name(),
-                        parseInt(swapiStarShip.passengers().replaceAll(",", "")));
+                        parseInt(swapiStarShip.passengers().replaceAll(",", "")),
+                        new BigDecimal(swapiStarShip.cargoCapacity()));
     }
 
     private Predicate<SwapiStarShip> hasValidPassengersValue() {
         return swapiStarShip -> swapiStarShip.passengers() != null
-                && !swapiStarShip.passengers().equalsIgnoreCase("n/a")
-                && !swapiStarShip.passengers().equalsIgnoreCase("unknown");
+                && !invalidCapacitiesValues.contains(swapiStarShip.passengers())
+                && !invalidCapacitiesValues.contains(swapiStarShip.cargoCapacity());
     }
 
     private SwapiResponse getStarShipsFromSwapi(String url) {
