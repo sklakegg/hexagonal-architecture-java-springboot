@@ -3,7 +3,9 @@ package rebelsrescue.fleet;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import rebelsrescue.fleet.api.AssembleAFleet;
+import rebelsrescue.fleet.spi.Fleets;
 import rebelsrescue.fleet.spi.StarShipInventory;
+import rebelsrescue.fleet.spi.stubs.InMemoryFleets;
 import rebelsrescue.fleet.spi.stubs.StarShipInventoryStub;
 
 import java.util.List;
@@ -27,7 +29,8 @@ class AssembleAFleetFunctionalTest {
         var numberOfPassengers = 1050;
 
         StarShipInventory starShipsInventory = new StarShipInventoryStub(starShips);
-        AssembleAFleet assembleAFleet = new FleetAssembler(starShipsInventory);
+        Fleets fleets = new InMemoryFleets();
+        AssembleAFleet assembleAFleet = new FleetAssembler(starShipsInventory, fleets);
 
         //When
         Fleet fleet = assembleAFleet.forPassengers(numberOfPassengers);
@@ -38,6 +41,7 @@ class AssembleAFleetFunctionalTest {
                 .has(enoughCapacityForThePassengers(numberOfPassengers))
                 .allMatch(hasPassengersCapacity());
 
+        assertThat(fleets.getById(fleet.id())).isEqualTo(fleet);
     }
 
     private Predicate<? super StarShip> hasPassengersCapacity() {
