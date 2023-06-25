@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingInt;
 
@@ -25,17 +26,13 @@ public class FleetAssembler implements AssembleAFleet {
 
     @Override
     public Fleet forPassengers(int numberOfPassengers) {
-        List<StarShip> starShips = retrieveStarShips();
-
+        List<StarShip> starShips = getStarShipsHavingPassengersCapacity();
         List<StarShip> rescueStarShips = selectStarShips(numberOfPassengers, starShips);
-
         return fleets.save(new Fleet(rescueStarShips));
     }
 
     private List<StarShip> selectStarShips(int numberOfPassengers, List<StarShip> starShips) {
-
         starShips.removeIf(doesntHaveEnoughCargoCapacity());
-
         List<StarShip> rescueStarShips = new ArrayList<>();
         while (numberOfPassengers > 0) {
             var starShip = starShips.remove(0);
@@ -49,11 +46,10 @@ public class FleetAssembler implements AssembleAFleet {
         return starShip -> starShip.cargoCapacity().compareTo(MINIMAL_CARGO_CAPACITY) < 0;
     }
 
-    private List<StarShip> retrieveStarShips() {
-        List<StarShip> starships =
-                starshipsInventory.starShips().stream()
-                        .filter(starShip -> starShip.passengersCapacity() > 0)
-                        .sorted(comparingInt(StarShip::passengersCapacity)).toList();
-        return new ArrayList<>(starships);
+    private List<StarShip> getStarShipsHavingPassengersCapacity() {
+        return starshipsInventory.starShips().stream()
+                .filter(starShip -> starShip.passengersCapacity() > 0)
+                .sorted(comparingInt(StarShip::passengersCapacity))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
