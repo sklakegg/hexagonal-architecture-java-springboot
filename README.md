@@ -1,5 +1,6 @@
 # Hexagonal Architecture Java Springboot
 
+Written by: Julien Topçu
 Hexagonal Architecture demonstration using Java and Spring Boot.
 
 To learn more about Hexagonal Architecture :
